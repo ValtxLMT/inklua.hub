@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InKlua — Inclusão Inteligente para Empresas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink-navy: #0D1F3C;
+      --ink-blue: #1A47A8;
+      --ink-cyan: #00C2CB;
+      --ink-lime: #B8F04A;
+      --ink-white: #F5F7FF;
+      --ink-muted: #8A96B0;
+      --ink-card: rgba(255,255,255,0.04);
+      --ink-border: rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink-navy);
+      color: var(--ink-white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 60px;
+      backdrop-filter: blur(20px);
+      background: rgba(13,31,60,0.7);
+      border-bottom: 1px solid var(--ink-border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.5rem;
+      color: var(--ink-white);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--ink-cyan); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      color: var(--ink-muted); text-decoration: none;
+      font-size: 0.875rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink-white); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 120px 60px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 80% 30%, rgba(0,194,203,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(26,71,168,0.2) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; opacity: 0.04;
+      background-image: linear-gradient(var(--ink-white) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--ink-white) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,194,203,0.12); border: 1px solid rgba(0,194,203,0.3);
+      color: var(--ink-cyan); border-radius: 100px;
+      padding: 6px 16px; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.5px;
+      margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+    }
+    .hero-tag::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--ink-cyan);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.02; letter-spacing: -2px;
+      opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+    }
+    h1 em { font-style: normal; color: var(--ink-cyan); }
+    h1 .lime { color: var(--ink-lime); }
+    .hero-sub {
+      margin-top: 24px; max-width: 520px;
+      font-size: 1.1rem; color: var(--ink-muted); font-weight: 300;
+      opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+    }
+    .hero-cta {
+      margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+    }
+    .btn-primary {
+      background: var(--ink-cyan); color: var(--ink-navy);
+      padding: 14px 32px; border-radius: 8px; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(0,194,203,0.3);
+    }
+    .btn-ghost {
+      background: transparent; color: var(--ink-white);
+      padding: 14px 32px; border-radius: 8px;
+      border: 1px solid var(--ink-border);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--ink-cyan); background: rgba(0,194,203,0.06); }
+
+    .hero-stats {
+      margin-top: 80px; display: flex; gap: 48px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s 0.65s forwards;
+      padding-top: 40px; border-top: 1px solid var(--ink-border);
+    }
+    .stat-item {}
+    .stat-num {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 2.2rem; letter-spacing: -1px; color: var(--ink-white);
+    }
+    .stat-num span { color: var(--ink-cyan); }
+    .stat-label { font-size: 0.8rem; color: var(--ink-muted); margin-top: 2px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 100px 60px; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      color: var(--ink-cyan); text-transform: uppercase; margin-bottom: 16px;
+    }
+    h2 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .section-desc {
+      font-size: 1.05rem; color: var(--ink-muted); max-width: 560px;
+      font-weight: 300; line-height: 1.7;
+    }
+
+    /* ── ADLIB PLACEHOLDER ── */
+    #adlib {
+      background: linear-gradient(135deg, rgba(26,71,168,0.15) 0%, rgba(0,194,203,0.08) 100%);
+      border: 2px dashed rgba(0,194,203,0.3);
+      border-radius: 20px; margin: 0 60px;
+      padding: 80px 60px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    #adlib::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,194,203,0.05) 0%, transparent 70%);
+    }
+    .adlib-inner { position: relative; z-index: 1; }
+    .adlib-badge {
+      display: inline-block;
+      background: rgba(184,240,74,0.15); border: 1px solid rgba(184,240,74,0.4);
+      color: var(--ink-lime); border-radius: 100px;
+      padding: 4px 14px; font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    #adlib h2 { color: var(--ink-white); }
+    .adlib-placeholder {
+      margin-top: 24px; padding: 32px;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--ink-border);
+      border-radius: 12px; color: var(--ink-muted);
+      font-style: italic; font-size: 1rem;
+    }
+    .adlib-placeholder strong { color: rgba(0,194,203,0.7); font-style: normal; }
+
+    /* ── PROBLEM ── */
+    #problema { background: rgba(255,255,255,0.015); }
+    .problem-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      margin-top: 60px; align-items: start;
+    }
+    .problem-card {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 16px; padding: 36px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .problem-card:hover { border-color: rgba(0,194,203,0.3); transform: translateY(-4px); }
+    .problem-card .icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(0,194,203,0.1); border: 1px solid rgba(0,194,203,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 20px;
+    }
+    .problem-card h3 {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem;
+      margin-bottom: 12px; letter-spacing: -0.3px;
+    }
+    .problem-card p { font-size: 0.9rem; color: var(--ink-muted); line-height: 1.7; }
+
+    .big-number {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(4rem, 10vw, 8rem); letter-spacing: -4px;
+      line-height: 1; color: var(--ink-white); opacity: 0.06;
+      position: absolute; right: -20px; bottom: 10px; pointer-events: none;
+      user-select: none;
+    }
+    .stat-highlight {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, rgba(26,71,168,0.3) 0%, rgba(13,31,60,0.8) 100%);
+      border: 1px solid rgba(26,71,168,0.4); border-radius: 16px;
+      padding: 36px; grid-column: 1 / -1;
+    }
+    .stat-highlight-content { position: relative; z-index: 1; }
+    .stat-row { display: flex; gap: 48px; flex-wrap: wrap; align-items: center; }
+    .stat-item-lg .num {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 3rem; letter-spacing: -2px; color: var(--ink-cyan);
+    }
+    .stat-item-lg .label { font-size: 0.85rem; color: var(--ink-muted); }
+
+    /* ── SOLUÇÃO ── */
+    #solucao {}
+    .solution-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+      margin-top: 60px;
+    }
+    .sol-card {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 16px; padding: 32px;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .sol-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--ink-cyan), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .sol-card:hover { border-color: rgba(0,194,203,0.2); transform: translateY(-3px); }
+    .sol-card:hover::after { opacity: 1; }
+    .sol-num {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.75rem;
+      color: var(--ink-cyan); letter-spacing: 1px; margin-bottom: 16px;
+    }
+    .sol-card h3 {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+    .sol-card p { font-size: 0.875rem; color: var(--ink-muted); line-height: 1.7; }
+
+    /* ── MODELO DE NEGÓCIOS ── */
+    #modelo { background: rgba(255,255,255,0.015); }
+    .modelo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px; margin-top: 60px;
+    }
+    .modelo-card {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 14px; padding: 28px;
+    }
+    .modelo-card .tag {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--ink-cyan);
+      background: rgba(0,194,203,0.1); border-radius: 100px;
+      padding: 3px 10px; display: inline-block; margin-bottom: 14px;
+    }
+    .modelo-card h4 {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .modelo-card ul { list-style: none; }
+    .modelo-card ul li {
+      font-size: 0.85rem; color: var(--ink-muted);
+      padding: 5px 0; border-bottom: 1px solid var(--ink-border);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modelo-card ul li:last-child { border-bottom: none; }
+    .modelo-card ul li::before {
+      content: '→'; color: var(--ink-cyan); font-size: 0.75rem; flex-shrink: 0;
+    }
+
+    /* ── EQUIPE ── */
+    #equipe {}
+    .team-grid {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      margin-top: 60px;
+    }
+    .team-card {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 14px; padding: 24px 28px;
+      display: flex; align-items: center; gap: 16px;
+      transition: all 0.3s; flex: 1 1 calc(50% - 8px); min-width: 260px;
+    }
+    .team-card:hover { border-color: rgba(0,194,203,0.3); }
+    .team-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--ink-blue), var(--ink-cyan));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      color: var(--ink-white); flex-shrink: 0;
+    }
+    .team-info h4 {
+      font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.95rem;
+    }
+    .team-info span { font-size: 0.8rem; color: var(--ink-muted); }
+
+    /* ── MAPA EMPATIA ── */
+    #empatia { background: rgba(255,255,255,0.015); }
+    .empatia-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 20px; margin-top: 60px;
+    }
+    .empatia-card {
+      background: var(--ink-card); border: 1px solid var(--ink-border);
+      border-radius: 14px; padding: 28px;
+    }
+    .empatia-card.accent { border-color: rgba(184,240,74,0.25); }
+    .empatia-card .e-label {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--ink-lime); margin-bottom: 12px;
+    }
+    .empatia-card.blue .e-label { color: var(--ink-cyan); }
+    .empatia-card h4 {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .empatia-card ul { list-style: none; }
+    .empatia-card ul li {
+      font-size: 0.875rem; color: var(--ink-muted); padding: 4px 0;
+    }
+
+    /* ── CTA FINAL ── */
+    #contato {
+      text-align: center; padding: 120px 60px;
+      position: relative; overflow: hidden;
+    }
+    #contato::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(0,194,203,0.08) 0%, transparent 70%);
+    }
+    #contato .inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    #contato h2 { font-size: clamp(2.5rem, 5vw, 4rem); }
+    #contato p { color: var(--ink-muted); margin: 20px 0 40px; font-size: 1.05rem; }
+    .contact-email {
+      display: inline-block;
+      color: var(--ink-cyan); font-size: 1.1rem; font-weight: 500;
+      text-decoration: none; border-bottom: 1px solid rgba(0,194,203,0.3);
+      padding-bottom: 2px; transition: border-color 0.2s;
+    }
+    .contact-email:hover { border-color: var(--ink-cyan); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 32px 60px; border-top: 1px solid var(--ink-border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem;
+    }
+    .footer-logo span { color: var(--ink-cyan); }
+    footer p { font-size: 0.8rem; color: var(--ink-muted); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px; background: var(--ink-border);
+      margin: 0 60px;
+    }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      section, #adlib { padding: 60px 24px; }
+      #adlib { margin: 0 24px; }
+      #hero { padding: 100px 24px 60px; }
+      .problem-grid, .solution-grid, .modelo-grid, .empatia-grid { grid-template-columns: 1fr; }
+      .stat-row { gap: 24px; }
+      .team-card { flex: 1 1 100%; }
+      .hero-stats { gap: 24px; }
+      footer { padding: 24px; flex-direction: column; text-align: center; }
+      .divider { margin: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">In<span>Klua</span></div>
+    <ul class="nav-links">
+      <li><a href="#problema">Problema</a></li>
+      <li><a href="#solucao">Solução</a></li>
+      <li><a href="#modelo">Modelo</a></li>
+      <li><a href="#equipe">Equipe</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Laboratório de Empreendedorismo e Negócios — UNISO</div>
+      <h1>Inclusão <em>inteligente</em><br/>para <span class="lime">empresas.</span></h1>
+      <p class="hero-sub">A InKlua conecta micro e pequenas empresas ao universo da acessibilidade — com treinamentos, conteúdo e ferramentas práticas de baixo custo.</p>
+      <div class="hero-cta">
+        <a href="#solucao" class="btn-primary">Ver a Solução</a>
+        <a href="#modelo" class="btn-ghost">Modelo de Negócios</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">18<span>,6M</span></div>
+          <div class="stat-label">brasileiros com deficiência (IBGE)</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">99<span>%</span></div>
+          <div class="stat-label">das empresas no Brasil são MPEs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num"><span>&lt;</span>10<span>%</span></div>
+          <div class="stat-label">delas são acessíveis de fato</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ADLIB PLACEHOLDER -->
+  <div id="adlib">
+    <div class="adlib-inner">
+      <span class="adlib-badge">Em breve</span>
+      <h2>Nosso Pitch em Vídeo</h2>
+      <p class="section-desc" style="margin: 0 auto; text-align: center;">
+        Em breve o adlib da InKlua estará aqui — apresentando nossa proposta de forma dinâmica e inclusiva.
+      </p>
+      <div class="adlib-placeholder">
+        <strong>[ Espaço reservado para o adlib ]</strong><br/>
+        Assim que você enviar o documento, esse espaço será atualizado com o vídeo ou apresentação da InKlua.
+      </div>
+    </div>
+  </div>
+
+  <!-- PROBLEMA -->
+  <section id="problema">
+    <div class="section-label">O Problema</div>
+    <h2>Exclusão por<br/>desinformação.</h2>
+    <p class="section-desc">Micro e pequenas empresas não adotam acessibilidade por enxergar o investimento como custo elevado — e não como oportunidade de crescimento.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="icon">💸</div>
+        <h3>Percepção de Custo</h3>
+        <p>Empresários acreditam que adaptar o negócio exige grandes investimentos, sem conhecer as soluções simples e acessíveis disponíveis.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="icon">📭</div>
+        <h3>Falta de Informação</h3>
+        <p>Não há canais claros que informem sobre legislação, benefícios e adaptações práticas voltados especificamente para MPEs.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="icon">🤝</div>
+        <h3>Ausência de Incentivo</h3>
+        <p>Sem programas de apoio ou parcerias que tornem o caminho mais simples, a acessibilidade fica em segundo plano.</p>
+      </div>
+      <div class="problem-card reveal">
+        <div class="icon">🚧</div>
+        <h3>Consequência Real</h3>
+        <p>Pessoas com deficiência são excluídas como clientes e colaboradores, gerando perdas para ambos os lados.</p>
+      </div>
+
+      <div class="stat-highlight reveal">
+        <div class="stat-highlight-content">
+          <div class="stat-row">
+            <div class="stat-item-lg">
+              <div class="num">18,6M</div>
+              <div class="label">brasileiros com alguma deficiência</div>
+            </div>
+            <div class="stat-item-lg">
+              <div class="num">99%</div>
+              <div class="label">das empresas são micro ou pequenas</div>
+            </div>
+            <div class="stat-item-lg">
+              <div class="num">R$ ??B</div>
+              <div class="label">poder de compra ignorado pelas MPEs</div>
+            </div>
+          </div>
+        </div>
+        <div class="big-number">99%</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUÇÃO -->
+  <section id="solucao">
+    <div class="section-label">A Solução</div>
+    <h2>InKlua —<br/>inclusão que<br/>faz sentido.</h2>
+    <p class="section-desc">Uma plataforma moderna e acessível que conecta, informa e prepara empresas para receber pessoas com deficiência — de forma prática, dinâmica e inclusiva.</p>
+
+    <div class="solution-grid">
+      <div class="sol-card reveal">
+        <div class="sol-num">01</div>
+        <h3>Conscientização de Empresários</h3>
+        <p>Conteúdo educativo que mostra como a inclusão melhora a imagem, aumenta clientes e ainda garante diferencial competitivo.</p>
+      </div>
+      <div class="sol-card reveal">
+        <div class="sol-num">02</div>
+        <h3>Treinamento de Funcionários</h3>
+        <p>Módulos práticos para capacitar equipes a receber e atender pessoas com deficiência com excelência e dignidade.</p>
+      </div>
+      <div class="sol-card reveal">
+        <div class="sol-num">03</div>
+        <h3>Adaptações de Baixo Custo</h3>
+        <p>Guias e ferramentas que mostram como tornar o ambiente físico e digital mais acessível sem grandes investimentos.</p>
+      </div>
+      <div class="sol-card reveal">
+        <div class="sol-num">04</div>
+        <h3>Incentivos e Parcerias</h3>
+        <p>Conectamos empresas a programas de apoio, incentivos fiscais e parceiros especializados para facilitar a jornada de inclusão.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MAPA DE EMPATIA -->
+  <section id="empatia">
+    <div class="section-label">Mapa de Empatia</div>
+    <h2>Quem estamos<br/>incluindo?</h2>
+    <p class="section-desc">Entendendo a perspectiva de pessoas com deficiência ao tentar acessar micro e pequenas empresas.</p>
+
+    <div class="empatia-grid">
+      <div class="empatia-card blue reveal">
+        <div class="e-label">Pensa e Sente</div>
+        <h4>Emoções internas</h4>
+        <ul>
+          <li>Frustração com barreiras constantes</li>
+          <li>Sentimento de exclusão social</li>
+          <li>Desejo de autonomia e independência</li>
+        </ul>
+      </div>
+      <div class="empatia-card blue reveal">
+        <div class="e-label">Vê</div>
+        <h4>Ambiente ao redor</h4>
+        <ul>
+          <li>Falta de acessibilidade nos estabelecimentos</li>
+          <li>Empresas sem preparo para recebê-los</li>
+          <li>Poucos exemplos positivos de inclusão</li>
+        </ul>
+      </div>
+      <div class="empatia-card blue reveal">
+        <div class="e-label">Escuta</div>
+        <h4>Influências externas</h4>
+        <ul>
+          <li>Falta de incentivo para empreendedores</li>
+          <li>Pouco debate público sobre o tema</li>
+          <li>Discurso de inclusão sem ação prática</li>
+        </ul>
+      </div>
+      <div class="empatia-card blue reveal">
+        <div class="e-label">Fala e Faz</div>
+        <h4>Comportamento observável</h4>
+        <ul>
+          <li>Evitam locais não acessíveis</li>
+          <li>Preferem empresas que demonstram cuidado</li>
+          <li>Compartilham experiências positivas e negativas</li>
+        </ul>
+      </div>
+      <div class="empatia-card reveal" style="border-color: rgba(239,68,68,0.25);">
+        <div class="e-label" style="color: #F87171;">Fraquezas / Dores</div>
+        <h4>O que prejudica</h4>
+        <ul>
+          <li>Falta de autonomia no dia a dia</li>
+          <li>Barreiras físicas (rampas, portas, banheiros)</li>
+          <li>Barreiras de comunicação</li>
+          <li>Atendimento despreparado</li>
+        </ul>
+      </div>
+      <div class="empatia-card accent reveal">
+        <div class="e-label">Ganhos</div>
+        <h4>O que deseja conquistar</h4>
+        <ul>
+          <li>Inclusão real e respeitosa</li>
+          <li>Acesso facilitado a produtos e serviços</li>
+          <li>Atendimento digno</li>
+          <li>Sentir-se valorizado como cliente</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODELO DE NEGÓCIOS -->
+  <section id="modelo">
+    <div class="section-label">Modelo de Negócios</div>
+    <h2>Como a InKlua<br/>opera.</h2>
+    <p class="section-desc">Construímos uma plataforma com parceiros estratégicos, canais digitais e fontes de receita sustentáveis.</p>
+
+    <div class="modelo-grid">
+      <div class="modelo-card reveal">
+        <span class="tag">Parceiros</span>
+        <h4>Quem nos apoia</h4>
+        <ul>
+          <li>Escolas e instituições</li>
+          <li>Influenciadores de inclusão</li>
+          <li>Designers especializados</li>
+          <li>Empresas de tecnologia</li>
+        </ul>
+      </div>
+      <div class="modelo-card reveal">
+        <span class="tag">Atividades</span>
+        <h4>O que fazemos</h4>
+        <ul>
+          <li>Produção de conteúdo</li>
+          <li>Gestão de comunidade</li>
+          <li>Desenvolvimento de pessoas</li>
+          <li>Manutenção da plataforma</li>
+        </ul>
+      </div>
+      <div class="modelo-card reveal">
+        <span class="tag">Segmentos</span>
+        <h4>Para quem</h4>
+        <ul>
+          <li>Jovens empreendedores</li>
+          <li>Escolas e universidades</li>
+          <li>Micro e pequenas empresas</li>
+          <li>Empreendedores individuais</li>
+        </ul>
+      </div>
+      <div class="modelo-card reveal">
+        <span class="tag">Canais</span>
+        <h4>Como chegamos</h4>
+        <ul>
+          <li>Instagram & TikTok</li>
+          <li>Site oficial</li>
+          <li>Plataforma própria</li>
+          <li>Conteúdo personalizado</li>
+        </ul>
+      </div>
+      <div class="modelo-card reveal">
+        <span class="tag">Custos</span>
+        <h4>Principais investimentos</h4>
+        <ul>
+          <li>Desenvolvimento da plataforma</li>
+          <li>Marketing e publicidade</li>
+          <li>Equipe criativa</li>
+        </ul>
+      </div>
+      <div class="modelo-card reveal">
+        <span class="tag">Receita</span>
+        <h4>Como ganhamos</h4>
+        <ul>
+          <li>Valor percebido pelo cliente</li>
+          <li>Análise de concorrência</li>
+          <li>Lucro desejado</li>
+          <li>Custo operacional</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EQUIPE -->
+  <section id="equipe">
+    <div class="section-label">Time</div>
+    <h2>Quem está<br/>por trás da InKlua.</h2>
+    <p class="section-desc">Um grupo apaixonado por inclusão, formado dentro do Laboratório de Empreendedorismo e Negócios da UNISO.</p>
+
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">AC</div>
+        <div class="team-info">
+          <h4>Ana Carolina</h4>
+          <span>Co-fundadora</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">AF</div>
+        <div class="team-info">
+          <h4>Aisha Ferreira</h4>
+          <span>Co-fundadora</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">SS</div>
+        <div class="team-info">
+          <h4>Sthella Souza</h4>
+          <span>Co-fundadora</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">VB</div>
+        <div class="team-info">
+          <h4>Vinicius Bassani</h4>
+          <span>Co-fundador</span>
+        </div>
+      </div>
+      <div class="team-card reveal">
+        <div class="team-avatar">VG</div>
+        <div class="team-info">
+          <h4>Valter Gimenez</h4>
+          <span>Co-fundador</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA CONTATO -->
+  <section id="contato">
+    <div class="inner">
+      <div class="section-label" style="text-align:center;">Vamos conversar</div>
+      <h2>Pronto para<br/>incluir?</h2>
+      <p>Se você é empreendedor, parceiro ou quer saber mais sobre como tornar sua empresa acessível, entre em contato.</p>
+      <a href="mailto:contato@inklua.com.br" class="contact-email">contato@inklua.com.br</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">In<span>Klua</span></div>
+    <p>Inclusão Inteligente para Empresas · UNISO · 2025</p>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Smooth nav active highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current
+          ? 'var(--ink-white)' : '';
+      });
+    });
+  </script>
+</body>
+</html>
