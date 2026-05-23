@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>InKlua — O que você sabe sobre acessibilidade?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#09080F;--surface:#13101F;--surface2:#1A1630;
+      --purple:#7B5CF0;--purple-l:#9B7EFA;--violet:#B48EFF;
+      --white:#F5F2FF;--off:#C4BCDF;--muted:#7A7393;
+      --border:rgba(123,92,240,0.18);--glow:0 0 40px rgba(123,92,240,0.3);
+      --green:#4ADE80;--red:#F87171;
+    }
+    html,body{height:100%;font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden}
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:linear-gradient(rgba(123,92,240,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(123,92,240,0.03) 1px,transparent 1px);
+      background-size:60px 60px;pointer-events:none;z-index:0;
+    }
+
+    /* LAYOUT */
+    .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;position:relative;z-index:1}
+
+    /* LOGO */
+    .logo{position:fixed;top:24px;left:32px;font-weight:800;font-size:1.3rem;color:var(--white);z-index:10}
+    .logo span{color:var(--purple-l)}
+
+    /* PROGRESS */
+    .progress-wrap{width:100%;max-width:560px;margin-bottom:36px}
+    .progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .progress-label{font-size:0.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+    .progress-count{font-size:0.72rem;font-weight:700;color:var(--purple-l)}
+    .progress-bar{height:3px;background:rgba(123,92,240,0.15);border-radius:99px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--violet));border-radius:99px;transition:width 0.5s cubic-bezier(.4,0,.2,1)}
+
+    /* CARD */
+    .card{
+      width:100%;max-width:560px;
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:16px;padding:40px;
+      box-shadow:var(--glow);
+      position:relative;overflow:hidden;
+    }
+    .card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:1px;
+      background:linear-gradient(90deg,transparent,var(--purple),transparent);
+    }
+    .q-num{font-size:0.68rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--purple-l);margin-bottom:14px}
+    .q-text{font-size:1.25rem;font-weight:700;line-height:1.4;color:var(--white);margin-bottom:8px}
+    .q-sub{font-size:0.85rem;color:var(--muted);margin-bottom:32px;font-weight:300}
+
+    /* SLIDER */
+    .slider-wrap{margin-bottom:28px}
+    .slider-display{
+      text-align:center;margin-bottom:20px;
+      font-size:3.5rem;font-weight:800;letter-spacing:-2px;
+      background:linear-gradient(120deg,var(--purple-l),var(--violet));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    input[type=range]{
+      -webkit-appearance:none;width:100%;height:4px;
+      background:rgba(123,92,240,0.2);border-radius:99px;outline:none;cursor:pointer;
+    }
+    input[type=range]::-webkit-slider-thumb{
+      -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+      background:var(--purple-l);border:3px solid var(--bg);
+      box-shadow:0 0 12px rgba(123,92,240,0.6);cursor:pointer;
+      transition:transform 0.15s;
+    }
+    input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+    .slider-labels{display:flex;justify-content:space-between;margin-top:8px}
+    .slider-labels span{font-size:0.7rem;color:var(--muted)}
+
+    /* CHOICE (single-select) */
+    .choices{display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+    .choice{
+      padding:14px 18px;border-radius:10px;
+      border:1px solid var(--border);background:transparent;
+      color:var(--off);font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:500;
+      cursor:pointer;text-align:left;transition:all 0.2s;
+    }
+    .choice:hover{border-color:rgba(123,92,240,0.5);color:var(--white);background:rgba(123,92,240,0.07)}
+    .choice.selected{border-color:var(--purple-l);background:rgba(123,92,240,0.15);color:var(--white)}
+
+    /* REVEAL */
+    .reveal-box{
+      display:none;border-radius:10px;padding:20px 24px;margin-bottom:24px;
+      border:1px solid rgba(123,92,240,0.3);background:rgba(123,92,240,0.08);
+    }
+    .reveal-box.show{display:block;animation:fadeUp 0.4s ease}
+    .reveal-box .real{font-size:0.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:6px}
+    .reveal-box .real-num{font-size:2rem;font-weight:800;letter-spacing:-1px;color:var(--white);margin-bottom:4px}
+    .reveal-box .real-num.good{color:var(--green)}
+    .reveal-box .real-num.bad{color:var(--red)}
+    .reveal-box p{font-size:0.82rem;color:var(--off);line-height:1.6;font-weight:300}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* BUTTONS */
+    .btn-row{display:flex;gap:12px;justify-content:flex-end}
+    .btn{
+      padding:12px 28px;border-radius:8px;border:none;
+      font-family:'Outfit',sans-serif;font-size:0.9rem;font-weight:600;
+      cursor:pointer;transition:all 0.2s;
+    }
+    .btn-primary{background:var(--purple);color:var(--white)}
+    .btn-primary:hover{background:var(--purple-l);box-shadow:var(--glow);transform:translateY(-1px)}
+    .btn-primary:disabled{opacity:0.35;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{color:var(--white);border-color:var(--purple)}
+
+    /* DONE */
+    .done{display:none;text-align:center;padding:20px 0}
+    .done-icon{font-size:3rem;margin-bottom:16px}
+    .done h2{font-size:1.8rem;font-weight:800;letter-spacing:-1px;color:var(--white);margin-bottom:10px}
+    .done p{color:var(--off);font-size:0.95rem;font-weight:300;line-height:1.7;max-width:380px;margin:0 auto 28px}
+    .done .score-wrap{
+      display:inline-block;padding:20px 40px;border-radius:12px;
+      border:1px solid var(--border);background:rgba(123,92,240,0.08);
+      margin-bottom:28px;
+    }
+    .done .score-label{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+    .done .score-num{
+      font-size:3.5rem;font-weight:800;letter-spacing:-2px;
+      background:linear-gradient(120deg,var(--purple-l),var(--violet));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    }
+
+    /* TRANSITION */
+    .card-inner{transition:opacity 0.25s,transform 0.25s}
+    .card-inner.fade-out{opacity:0;transform:translateY(8px)}
+  </style>
+</head>
+<body>
+<div class="logo">In<span>Klua</span></div>
+
+<div class="app">
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-top">
+      <span class="progress-label">Quiz de Percepção</span>
+      <span class="progress-count" id="progressCount">1 / 5</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-inner" id="cardInner">
+      <!-- questions injected here -->
+    </div>
+    <div class="done" id="doneScreen">
+      <div class="done-icon">✦</div>
+      <h2>Obrigado pela resposta!</h2>
+      <p>Suas respostas foram registradas. Elas vão aparecer ao vivo no painel da InKlua — e ajudar a mostrar o quanto ainda há para evoluir.</p>
+      <div class="score-wrap">
+        <div class="score-label">Você respondeu</div>
+        <div class="score-num" id="finalCount">5/5</div>
+      </div>
+      <br/>
+      <a href="inklua-painel.html" style="display:inline-block;padding:13px 32px;border-radius:8px;background:var(--purple);color:var(--white);text-decoration:none;font-weight:600;font-size:0.9rem;transition:all 0.2s"
+        onmouseover="this.style.background='var(--purple-l)'" onmouseout="this.style.background='var(--purple)'">
+        Ver o painel ao vivo →
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'inklua_quiz_results';
+
+const questions = [
+  {
+    id: 'q1',
+    type: 'slider',
+    num: '01',
+    text: 'Qual % das pessoas com deficiência você acha que está empregada no Brasil?',
+    sub: 'Arraste o slider para indicar sua estimativa',
+    min: 0, max: 100, step: 1, unit: '%',
+    realValue: '28%',
+    realClass: 'bad',
+    realText: 'Apenas 28% das pessoas com deficiência em idade ativa estão empregadas no Brasil. A média geral da população é 67%. (RAIS 2022)',
+  },
+  {
+    id: 'q2',
+    type: 'slider',
+    num: '02',
+    text: 'Quantos milhões de brasileiros têm algum tipo de deficiência?',
+    sub: 'Considere todos os tipos: física, visual, auditiva, intelectual',
+    min: 0, max: 50, step: 0.5, unit: 'M',
+    realValue: '18,6M',
+    realClass: '',
+    realText: 'São 18,6 milhões de brasileiros com deficiência — quase 10% da população. Uma parcela enorme frequentemente ignorada pelo mercado. (IBGE 2022)',
+  },
+  {
+    id: 'q3',
+    type: 'choice',
+    num: '03',
+    text: 'O que você acha que impede mais as MPEs de investir em acessibilidade?',
+    sub: 'Escolha a opção que mais representa sua opinião',
+    options: [
+      'Custo alto das adaptações físicas',
+      'Falta de informação e orientação',
+      'Não enxergam como prioridade',
+      'Acreditam que a legislação não se aplica a elas',
+    ],
+    realValue: 'Falta de informação',
+    realClass: '',
+    realText: 'Em pesquisas com MPEs, a falta de informação sobre como começar é a barreira mais citada — acima do custo. Muitas adaptações simples custam menos de R$ 500.',
+  },
+  {
+    id: 'q4',
+    type: 'slider',
+    num: '04',
+    text: 'Qual % das empresas brasileiras cumpre os requisitos básicos de acessibilidade?',
+    sub: 'Rampas, banheiros adaptados, comunicação inclusiva...',
+    min: 0, max: 100, step: 1, unit: '%',
+    realValue: '<10%',
+    realClass: 'bad',
+    realText: 'Menos de 10% das empresas brasileiras, especialmente MPEs, atendem aos requisitos mínimos de acessibilidade estabelecidos pela Lei Brasileira de Inclusão (2015).',
+  },
+  {
+    id: 'q5',
+    type: 'choice',
+    num: '05',
+    text: 'Qual é o poder de compra estimado das pessoas com deficiência no Brasil?',
+    sub: 'Considere o total anual de renda disponível desse grupo',
+    options: [
+      'Menos de R$ 50 bilhões',
+      'Entre R$ 50 e R$ 200 bilhões',
+      'Entre R$ 200 e R$ 500 bilhões',
+      'Mais de R$ 500 bilhões',
+    ],
+    realValue: '+R$ 200 bilhões',
+    realClass: 'good',
+    realText: 'O poder de compra das pessoas com deficiência no Brasil supera R$ 200 bilhões anuais — um mercado enorme que a maioria das empresas simplesmente ignora.',
+  },
+];
+
+let current = 0;
+let answers = [];
+let revealed = false;
+
+function render() {
+  const q = questions[current];
+  const pct = (current / questions.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = (current + 1) + ' / ' + questions.length;
+
+  let html = `<div class="q-num">Pergunta ${q.num}</div>
+    <div class="q-text">${q.text}</div>
+    <div class="q-sub">${q.sub}</div>`;
+
+  if (q.type === 'slider') {
+    const def = Math.round((q.min + q.max) / 2);
+    html += `
+      <div class="slider-wrap">
+        <div class="slider-display" id="sliderVal">${def}${q.unit}</div>
+        <input type="range" id="theSlider" min="${q.min}" max="${q.max}" step="${q.step}" value="${def}"
+          oninput="document.getElementById('sliderVal').textContent=this.value+'${q.unit}'"/>
+        <div class="slider-labels"><span>${q.min}${q.unit}</span><span>${q.max}${q.unit}</span></div>
+      </div>`;
+  } else {
+    html += `<div class="choices" id="choicesWrap">`;
+    q.options.forEach((opt, i) => {
+      html += `<button class="choice" onclick="selectChoice(${i})">${opt}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `
+    <div class="reveal-box" id="revealBox">
+      <div class="real">Realidade</div>
+      <div class="real-num ${q.realClass}">${q.realValue}</div>
+      <p>${q.realText}</p>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="mainBtn" onclick="handleBtn()" ${q.type==='choice'?'disabled':''}>
+        ${current === questions.length - 1 ? 'Revelar & Enviar →' : 'Revelar →'}
+      </button>
+    </div>`;
+
+  const inner = document.getElementById('cardInner');
+  inner.innerHTML = html;
+  revealed = false;
+}
+
+function selectChoice(i) {
+  document.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.choice')[i].classList.add('selected');
+  document.getElementById('mainBtn').removeAttribute('disabled');
+  window._selectedChoice = i;
+}
+
+function handleBtn() {
+  const q = questions[current];
+  if (!revealed) {
+    // save answer
+    if (q.type === 'slider') {
+      answers.push({ id: q.id, value: document.getElementById('theSlider').value });
+    } else {
+      answers.push({ id: q.id, value: window._selectedChoice });
+    }
+    // reveal
+    document.getElementById('revealBox').classList.add('show');
+    document.getElementById('mainBtn').textContent = current === questions.length - 1 ? 'Enviar →' : 'Próxima →';
+    revealed = true;
+  } else {
+    // next
+    if (current < questions.length - 1) {
+      const inner = document.getElementById('cardInner');
+      inner.classList.add('fade-out');
+      setTimeout(() => {
+        current++;
+        inner.classList.remove('fade-out');
+        render();
+      }, 220);
+    } else {
+      saveAndFinish();
+    }
+  }
+}
+
+function saveAndFinish() {
+  // Load existing results
+  let all = [];
+  try { all = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){}
+  const entry = { ts: Date.now(), answers };
+  all.push(entry);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+
+  // Show done
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('cardInner').style.display = 'none';
+  document.getElementById('doneScreen').style.display = 'block';
+  document.getElementById('finalCount').textContent = questions.length + '/' + questions.length;
+}
+
+render();
+</script>
+</body>
+</html>
