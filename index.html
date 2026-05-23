@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>InKlua — Inclusão Inteligente para Empresas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -30,7 +30,7 @@
     body {
       background: var(--bg);
       color: var(--white);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Nunito', sans-serif;
       font-size: 16px;
       line-height: 1.65;
       overflow-x: hidden;
@@ -54,16 +54,16 @@
       width: 8px; height: 8px; border-radius: 50%;
       background: var(--purple-l);
       position: fixed; pointer-events: none; z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: width 0.15s, height 0.15s;
+      top: 0; left: 0;
       box-shadow: 0 0 12px var(--purple-l);
+      will-change: transform;
     }
     .cursor-ring {
       width: 32px; height: 32px; border-radius: 50%;
       border: 1px solid rgba(123,92,240,0.4);
       position: fixed; pointer-events: none; z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: left 0.08s ease, top 0.08s ease, width 0.2s, height 0.2s, opacity 0.2s;
+      top: 0; left: 0;
+      will-change: transform;
     }
 
     /* ── NAV ── */
@@ -76,7 +76,7 @@
       border-bottom: 1px solid var(--border);
     }
     .nav-logo {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: 1.5rem;
       color: var(--white); letter-spacing: -0.5px;
       text-decoration: none;
@@ -141,7 +141,7 @@
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
     h1 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: clamp(3rem, 5.5vw, 5rem);
       line-height: 1.04; letter-spacing: -2px;
       color: var(--white);
@@ -166,7 +166,7 @@
     .btn-purple {
       background: var(--purple); color: var(--white);
       padding: 13px 30px; border-radius: 6px; border: none;
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Nunito', sans-serif;
       font-size: 0.9rem; font-weight: 500;
       cursor: pointer; text-decoration: none;
       transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
@@ -181,7 +181,7 @@
       background: transparent; color: var(--off);
       padding: 13px 30px; border-radius: 6px;
       border: 1px solid var(--border);
-      font-family: 'DM Sans', sans-serif;
+      font-family: 'Nunito', sans-serif;
       font-size: 0.9rem; font-weight: 400;
       cursor: pointer; text-decoration: none;
       transition: border-color 0.2s, color 0.2s;
@@ -211,7 +211,7 @@
       text-transform: uppercase; color: var(--muted); margin-bottom: 24px;
     }
     .stat-big {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: 4.5rem; letter-spacing: -3px;
       line-height: 1;
       background: linear-gradient(120deg, var(--purple-l), var(--violet));
@@ -224,7 +224,7 @@
       border-top: 1px solid var(--border);
     }
     .mini-stat .n {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 1.5rem; letter-spacing: -1px;
       color: var(--violet);
     }
@@ -247,7 +247,7 @@
       width: 24px; height: 1px; background: var(--purple);
     }
     h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: clamp(2rem, 4vw, 3rem);
       letter-spacing: -1.5px; line-height: 1.08; margin-bottom: 18px;
       color: var(--white);
@@ -323,7 +323,7 @@
       border: 1px solid var(--border);
     }
     .p-card h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 1rem;
       margin-bottom: 10px; color: var(--white);
     }
@@ -344,7 +344,7 @@
       background: linear-gradient(90deg, transparent, var(--purple), transparent);
     }
     .p-banner .bn {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: 2.8rem; letter-spacing: -2px;
       background: linear-gradient(120deg, var(--purple-l), var(--violet));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -370,14 +370,14 @@
       box-shadow: 0 12px 40px rgba(123,92,240,0.1);
     }
     .sol-card .num {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: 5rem; letter-spacing: -3px;
       color: var(--purple); opacity: 0.07;
       position: absolute; top: 8px; right: 16px;
       line-height: 1; pointer-events: none;
     }
     .sol-card h3 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 1rem; margin-bottom: 10px; color: var(--white);
     }
     .sol-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.75; }
@@ -412,7 +412,7 @@
       background: var(--violet); box-shadow: 0 0 6px var(--violet);
     }
     .emp-card h4 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; color: var(--white);
     }
     .emp-card ul { list-style: none; }
@@ -448,7 +448,7 @@
       border: 1px solid var(--border);
     }
     .mod-card h4 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 0.9rem; margin-bottom: 12px; color: var(--white);
     }
     .mod-card ul { list-style: none; }
@@ -478,7 +478,7 @@
       width: 46px; height: 46px; border-radius: 50%;
       background: linear-gradient(135deg, var(--purple-d), var(--purple-l));
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 700; font-size: 0.85rem; color: var(--white);
       flex-shrink: 0;
       box-shadow: 0 0 16px rgba(123,92,240,0.3);
@@ -525,7 +525,7 @@
       position: relative; z-index: 1;
     }
     .f-logo {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Outfit', sans-serif;
       font-weight: 800; font-size: 1rem; color: var(--white);
     }
     .f-logo span { color: var(--purple-l); }
@@ -887,15 +887,29 @@
   </footer>
 
   <script>
-    // Cursor
+    // Cursor — dot follows instantly, ring lerps smoothly
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+
     document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
-      ring.style.left   = e.clientX + 'px';
-      ring.style.top    = e.clientY + 'px';
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 4}px, ${my - 4}px)`;
+      cursor.style.left = '0'; cursor.style.top = '0';
     });
+
+    // Override cursor positioning to use transform
+    cursor.style.left = '0'; cursor.style.top = '0';
+
+    function lerp(a, b, t) { return a + (b - a) * t; }
+
+    function animRing() {
+      rx = lerp(rx, mx, 0.18);
+      ry = lerp(ry, my, 0.18);
+      ring.style.transform = `translate(${rx - 16}px, ${ry - 16}px)`;
+      requestAnimationFrame(animRing);
+    }
+    animRing();
 
     // Scroll reveal
     const obs = new IntersectionObserver((entries) => {
