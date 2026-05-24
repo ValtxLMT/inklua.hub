@@ -15,61 +15,29 @@
       --green:#4ADE80;--red:#F87171;--yellow:#FCD34D;
     }
     html,body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden}
-    body::before{
-      content:'';position:fixed;inset:0;
-      background-image:linear-gradient(rgba(123,92,240,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(123,92,240,0.03) 1px,transparent 1px);
-      background-size:60px 60px;pointer-events:none;z-index:0;
-    }
-
-    /* NAV */
-    nav{
-      position:sticky;top:0;z-index:100;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:18px 56px;
-      background:rgba(9,8,15,0.85);backdrop-filter:blur(20px);
-      border-bottom:1px solid var(--border);
-    }
+    body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(123,92,240,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(123,92,240,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0}
+    nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 56px;background:rgba(9,8,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
     .logo{font-weight:800;font-size:1.3rem;color:var(--white);text-decoration:none}
     .logo span{color:var(--purple-l)}
-    .live-badge{
-      display:flex;align-items:center;gap:8px;
-      background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);
-      border-radius:6px;padding:5px 14px;
-      font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);
-    }
+    .live-badge{display:flex;align-items:center;gap:8px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);border-radius:6px;padding:5px 14px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green)}
     .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 1.5s infinite}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-
-    /* LAYOUT */
     .page{max-width:1100px;margin:0 auto;padding:56px 32px 80px;position:relative;z-index:1}
-
-    /* HEADER */
     .page-header{margin-bottom:56px}
     .s-label{font-size:0.68rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--purple-l);margin-bottom:14px;display:flex;align-items:center;gap:12px}
     .s-label::before{content:'';display:inline-block;width:20px;height:1px;background:var(--purple)}
     h1{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
     .sub{color:var(--muted);font-size:1rem;font-weight:300;max-width:500px;line-height:1.7}
-
-    /* HERO STATS ROW */
     .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px}
-    .stat-card{
-      background:var(--surface);border:1px solid var(--border);border-radius:12px;
-      padding:28px;position:relative;overflow:hidden;
-    }
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;position:relative;overflow:hidden}
     .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent)}
     .stat-card .sl{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
     .stat-card .sn{font-size:2.8rem;font-weight:800;letter-spacing:-2px;background:linear-gradient(120deg,var(--purple-l),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
     .stat-card .sd{font-size:0.8rem;color:var(--muted);margin-top:6px;font-weight:300}
     .stat-card.highlight .sn{background:linear-gradient(120deg,var(--green),#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-
-    /* QUESTION PANELS */
-    .q-panel{
-      background:var(--surface);border:1px solid var(--border);border-radius:14px;
-      padding:32px 36px;margin-bottom:20px;position:relative;overflow:hidden;
-    }
+    .q-panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px 36px;margin-bottom:20px;position:relative;overflow:hidden}
     .q-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple-l),transparent)}
     .q-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:24px;flex-wrap:wrap}
-    .q-title-wrap{}
     .q-num-tag{font-size:0.65rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--purple-l);margin-bottom:6px}
     .q-title{font-size:1rem;font-weight:700;color:var(--white);line-height:1.4;max-width:520px}
     .q-right{text-align:right;flex-shrink:0}
@@ -77,105 +45,80 @@
     .real-val{font-size:1.5rem;font-weight:800;letter-spacing:-1px;color:var(--violet)}
     .real-val.red{color:var(--red)}
     .real-val.green{color:var(--green)}
-
-    /* SLIDER RESULT */
     .avg-display{margin-bottom:16px}
     .avg-label{font-size:0.72rem;font-weight:600;color:var(--muted);margin-bottom:8px;letter-spacing:0.5px}
     .gauge-wrap{position:relative;height:48px;background:rgba(123,92,240,0.08);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
-    .gauge-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--purple-d,#5B3DD8),var(--purple-l));transition:width 1s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;min-width:36px}
+    .gauge-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#5B3DD8,var(--purple-l));transition:width 1s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;min-width:36px}
     .gauge-val{font-size:0.8rem;font-weight:700;color:var(--white)}
-    .real-line{position:absolute;top:0;bottom:0;width:2px;background:var(--violet);opacity:0.8}
-    .real-label-line{position:absolute;top:-20px;font-size:0.62rem;color:var(--violet);font-weight:700;transform:translateX(-50%);white-space:nowrap}
-
-    /* CHOICE RESULT */
     .choice-bars{display:flex;flex-direction:column;gap:10px}
-    .c-bar-wrap{}
     .c-bar-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
     .c-bar-text{font-size:0.82rem;color:var(--off);font-weight:400}
     .c-bar-pct{font-size:0.82rem;font-weight:700;color:var(--purple-l)}
     .c-bar-track{height:8px;background:rgba(123,92,240,0.1);border-radius:99px;overflow:hidden}
     .c-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--purple-l));transition:width 1s cubic-bezier(.4,0,.2,1)}
     .c-bar-fill.correct{background:linear-gradient(90deg,#16A34A,var(--green))}
-
-    /* INSIGHT */
-    .insight{
-      margin-top:20px;padding:16px 20px;border-radius:8px;
-      background:rgba(123,92,240,0.07);border:1px solid rgba(123,92,240,0.2);
-    }
+    .insight{margin-top:20px;padding:16px 20px;border-radius:8px;background:rgba(123,92,240,0.07);border:1px solid rgba(123,92,240,0.2)}
     .insight p{font-size:0.8rem;color:var(--off);line-height:1.6;font-weight:300}
     .insight strong{color:var(--violet);font-weight:600}
-
-    /* FOOTER */
     .panel-footer{margin-top:48px;text-align:center}
-    .panel-footer a{
-      display:inline-block;padding:13px 32px;border-radius:8px;
-      background:var(--purple);color:var(--white);text-decoration:none;
-      font-weight:600;font-size:0.9rem;transition:all 0.2s;
-    }
+    .panel-footer a{display:inline-block;padding:13px 32px;border-radius:8px;background:var(--purple);color:var(--white);text-decoration:none;font-weight:600;font-size:0.9rem;transition:all 0.2s}
     .panel-footer a:hover{background:var(--purple-l);box-shadow:var(--glow)}
     .panel-footer p{margin-top:16px;font-size:0.8rem;color:var(--muted)}
-
-    /* EMPTY */
     .empty{text-align:center;padding:80px 20px}
     .empty-icon{font-size:2.5rem;margin-bottom:16px;opacity:0.4}
     .empty h3{font-size:1.2rem;font-weight:700;color:var(--off);margin-bottom:8px}
     .empty p{font-size:0.85rem;color:var(--muted);font-weight:300}
-
-    /* PULSE new entry */
     @keyframes pulseIn{0%{box-shadow:0 0 0 0 rgba(123,92,240,0.5)}70%{box-shadow:0 0 0 14px rgba(123,92,240,0)}100%{box-shadow:0 0 0 0 rgba(123,92,240,0)}}
     .new-entry{animation:pulseIn 0.8s ease}
-
-    @media(max-width:700px){
-      nav{padding:14px 20px}
-      .page{padding:40px 16px 60px}
-      .stats-row{grid-template-columns:1fr}
-      .q-header{flex-direction:column}
-      .q-right{text-align:left}
-    }
+    /* status de conexão */
+    .conn-badge{font-size:0.68rem;font-weight:600;color:var(--muted);letter-spacing:0.5px}
+    .conn-badge.err{color:var(--red)}
+    @media(max-width:700px){nav{padding:14px 20px}.page{padding:40px 16px 60px}.stats-row{grid-template-columns:1fr}.q-header{flex-direction:column}.q-right{text-align:left}}
   </style>
 </head>
 <body>
 <nav>
-  <a href="inklua-roxo.html" class="logo">In<span>Klua</span></a>
-  <div class="live-badge"><span class="live-dot"></span>Ao vivo</div>
+  <a href="index.html" class="logo">In<span>Klua</span></a>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="conn-badge" id="connBadge">Conectando...</span>
+    <div class="live-badge"><span class="live-dot"></span>Ao vivo</div>
+  </div>
 </nav>
 
 <div class="page">
   <div class="page-header">
     <div class="s-label">Painel de Respostas</div>
     <h1>O que as pessoas<br/>acham que sabem.</h1>
-    <p class="sub">Dados em tempo real do quiz de percepção sobre acessibilidade. Atualizado a cada 3 segundos.</p>
+    <p class="sub">Dados em tempo real do quiz de percepção sobre acessibilidade. Atualizado a cada 5 segundos.</p>
   </div>
 
-  <div class="stats-row" id="statsRow">
+  <div class="stats-row">
     <div class="stat-card">
       <div class="sl">Total de respostas</div>
-      <div class="sn" id="totalRespostas">0</div>
+      <div class="sn" id="totalRespostas">—</div>
       <div class="sd">pessoas responderam o quiz</div>
     </div>
     <div class="stat-card">
-      <div class="sl">Média de acertos</div>
-      <div class="sn" id="mediaAcertos">—</div>
-      <div class="sd">de 5 perguntas por participante</div>
-    </div>
-    <div class="stat-card highlight">
       <div class="sl">Última resposta</div>
       <div class="sn" id="ultimaResposta">—</div>
       <div class="sd">tempo atrás</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="sl">Perguntas no quiz</div>
+      <div class="sn">5</div>
+      <div class="sd">sobre acessibilidade no Brasil</div>
     </div>
   </div>
 
   <div id="panelContent"></div>
 
   <div class="panel-footer">
-    <a href="inklua-quiz.html">Responder o quiz →</a>
-    <p>Compartilhe o QR code para mais respostas</p>
+    <a href="perguntas_quiz.html">Responder o quiz →</a>
+    <p>Compartilhe o link para coletar mais respostas</p>
   </div>
 </div>
 
 <script>
-const STORAGE_KEY = 'inklua_quiz_results';
-
 const questions = [
   {id:'q1',type:'slider',label:'Pergunta 01',title:'Qual % das pessoas com deficiência você acha que está empregada?',unit:'%',realNum:28,realLabel:'28%',realClass:'red',realText:'Apenas <strong>28%</strong> das pessoas com deficiência em idade ativa estão empregadas — vs. 67% da população geral. (RAIS 2022)'},
   {id:'q2',type:'slider',label:'Pergunta 02',title:'Quantos milhões de brasileiros têm algum tipo de deficiência?',unit:'M',realNum:18.6,realLabel:'18,6M',realClass:'',realText:'São <strong>18,6 milhões</strong> de brasileiros com deficiência — quase 10% da população, um mercado enorme frequentemente ignorado. (IBGE 2022)'},
@@ -186,68 +129,82 @@ const questions = [
 
 function timeAgo(ts) {
   const s = Math.floor((Date.now() - ts) / 1000);
+  if (s < 5)  return 'agora';
   if (s < 60) return s + 's';
   if (s < 3600) return Math.floor(s/60) + 'min';
   return Math.floor(s/3600) + 'h';
 }
 
-function getData() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; }
+let prevTotal = -1;
+
+async function fetchAndRender() {
+  const badge = document.getElementById('connBadge');
+  try {
+    const res = await fetch('/api/responses');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+
+    badge.textContent = 'Conectado ✓';
+    badge.className = 'conn-badge';
+
+    renderPanel(data);
+  } catch (err) {
+    badge.textContent = 'Erro de conexão';
+    badge.className = 'conn-badge err';
+    console.error(err);
+  }
 }
 
-function calcStats(data) {
-  if (!data.length) return null;
+function renderPanel(data) {
   const total = data.length;
-  const last = data[data.length-1];
+  document.getElementById('totalRespostas').textContent = total || '0';
+  document.getElementById('ultimaResposta').textContent =
+    total ? timeAgo(data[data.length - 1].ts) : '—';
 
-  // per question aggregation
+  if (total !== prevTotal && prevTotal >= 0) {
+    const card = document.getElementById('totalRespostas').parentElement;
+    card.classList.add('new-entry');
+    setTimeout(() => card.classList.remove('new-entry'), 1000);
+  }
+  prevTotal = total;
+
+  const content = document.getElementById('panelContent');
+
+  if (!total) {
+    content.innerHTML = `<div class="empty"><div class="empty-icon">◌</div><h3>Nenhuma resposta ainda</h3><p>Compartilhe o link do quiz para coletar as primeiras respostas.</p></div>`;
+    return;
+  }
+
+  // Agregar respostas
   const qStats = {};
-  questions.forEach(q => { qStats[q.id] = q.type === 'slider' ? {values:[]} : {counts:new Array(q.options?.length||0).fill(0),total:0}; });
+  questions.forEach(q => {
+    qStats[q.id] = q.type === 'slider'
+      ? { values: [] }
+      : { counts: new Array((q.options || []).length).fill(0), total: 0 };
+  });
 
   data.forEach(entry => {
-    entry.answers?.forEach(a => {
-      if (!qStats[a.id]) return;
-      if (questions.find(q=>q.id===a.id)?.type === 'slider') {
+    (entry.answers || []).forEach(a => {
+      const q = questions.find(q => q.id === a.id);
+      if (!q || !qStats[a.id]) return;
+      if (q.type === 'slider') {
         qStats[a.id].values.push(parseFloat(a.value));
       } else {
-        qStats[a.id].counts[a.value]++;
-        qStats[a.id].total++;
+        const idx = parseInt(a.value, 10);
+        if (!isNaN(idx) && idx < qStats[a.id].counts.length) {
+          qStats[a.id].counts[idx]++;
+          qStats[a.id].total++;
+        }
       }
     });
   });
 
-  return { total, last, qStats };
-}
-
-let prevTotal = -1;
-
-function render() {
-  const data = getData();
-  const stats = calcStats(data);
-  const content = document.getElementById('panelContent');
-
-  // update top stats
-  document.getElementById('totalRespostas').textContent = data.length;
-  document.getElementById('ultimaResposta').textContent = stats ? timeAgo(stats.last.ts) : '—';
-  document.getElementById('mediaAcertos').textContent = stats ? '✓' : '—';
-
-  if (data.length !== prevTotal && prevTotal >= 0) {
-    document.getElementById('totalRespostas').parentElement.classList.add('new-entry');
-    setTimeout(() => document.getElementById('totalRespostas').parentElement.classList.remove('new-entry'), 1000);
-  }
-  prevTotal = data.length;
-
-  if (!stats) {
-    content.innerHTML = `<div class="empty"><div class="empty-icon">◌</div><h3>Nenhuma resposta ainda</h3><p>Escaneie o QR code ou acesse o quiz para ser o primeiro a responder.</p></div>`;
-    return;
-  }
-
   let html = '';
   questions.forEach(q => {
-    const qs = stats.qStats[q.id];
+    const qs = qStats[q.id];
     html += `<div class="q-panel">
       <div class="q-header">
-        <div class="q-title-wrap">
+        <div>
           <div class="q-num-tag">${q.label}</div>
           <div class="q-title">${q.title}</div>
         </div>
@@ -258,12 +215,14 @@ function render() {
       </div>`;
 
     if (q.type === 'slider') {
-      const avg = qs.values.length ? (qs.values.reduce((a,b)=>a+b,0)/qs.values.length).toFixed(1) : 0;
-      const pctFill = Math.min(100, (avg / (q.unit==='%' ? 100 : 50)) * 100);
-      const realPct = Math.min(100, (q.realNum / (q.unit==='%' ? 100 : 50)) * 100);
+      const count = qs.values.length;
+      const avg = count ? (qs.values.reduce((a, b) => a + b, 0) / count).toFixed(1) : 0;
+      const maxVal = q.unit === '%' ? 100 : 50;
+      const pctFill = Math.min(100, (avg / maxVal) * 100);
+      const realPct = Math.min(100, (q.realNum / maxVal) * 100);
       html += `
         <div class="avg-display">
-          <div class="avg-label">Média das estimativas (${qs.values.length} respostas)</div>
+          <div class="avg-label">Média das estimativas (${count} resposta${count !== 1 ? 's' : ''})</div>
           <div class="gauge-wrap">
             <div style="position:absolute;top:0;bottom:0;left:${realPct}%;width:2px;background:var(--violet);opacity:0.7;z-index:2"></div>
             <div style="position:absolute;top:4px;left:${realPct}%;font-size:0.6rem;color:var(--violet);font-weight:700;transform:translateX(-50%);white-space:nowrap;z-index:3">real: ${q.realLabel}</div>
@@ -273,17 +232,17 @@ function render() {
     } else {
       const tot = qs.total || 1;
       html += `<div class="choice-bars">`;
-      q.options.forEach((opt, i) => {
+      (q.options || []).forEach((opt, i) => {
         const cnt = qs.counts[i] || 0;
         const pct = Math.round((cnt / tot) * 100);
         const isCorrect = i === q.correctIndex;
         html += `
-          <div class="c-bar-wrap">
+          <div>
             <div class="c-bar-label">
               <span class="c-bar-text">${isCorrect ? '✓ ' : ''}${opt}</span>
               <span class="c-bar-pct">${pct}% (${cnt})</span>
             </div>
-            <div class="c-bar-track"><div class="c-bar-fill ${isCorrect?'correct':''}" style="width:${pct}%"></div></div>
+            <div class="c-bar-track"><div class="c-bar-fill ${isCorrect ? 'correct' : ''}" style="width:${pct}%"></div></div>
           </div>`;
       });
       html += `</div>`;
@@ -295,8 +254,9 @@ function render() {
   content.innerHTML = html;
 }
 
-render();
-setInterval(render, 3000);
+// Busca inicial + polling a cada 5s
+fetchAndRender();
+setInterval(fetchAndRender, 5000);
 </script>
 </body>
 </html>
